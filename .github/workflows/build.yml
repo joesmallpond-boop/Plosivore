@@ -17,8 +17,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: macos-latest
-            name: macOS
+          - os: macos-15
+            name: macOS-15
+          - os: macos-26
+            name: macOS-26
           - os: windows-latest
             name: Windows
           - os: ubuntu-22.04
@@ -87,7 +89,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: runner.os == 'macOS'
         with:
-          name: Plosivore-macOS-Installer
+          name: Plosivore-${{ matrix.name }}-Installer
           path: installer/*.dmg
 
       - name: Collect
