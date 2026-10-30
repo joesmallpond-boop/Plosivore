@@ -1,0 +1,3 @@
+#!/bin/bash
+rm -rf "$3/Applications/Plosivore.app"
+exit 0

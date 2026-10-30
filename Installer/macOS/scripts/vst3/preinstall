@@ -1,0 +1,4 @@
+#!/bin/bash
+# Remove any previous version first so no stale files are left inside the bundle.
+rm -rf "$3/Library/Audio/Plug-Ins/VST3/Plosivore.vst3"
+exit 0

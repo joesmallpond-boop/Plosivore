@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- productbuild distribution for the Plosivore installer. __VERSION__ is filled in by build_pkg.sh. -->
+<installer-gui-script minSpecVersion="2">
+    <title>Plosivore</title>
+    <organization>com.plosivore</organization>
+
+    <!-- Install for all users into /Library and /Applications (asks for an admin password). -->
+    <domains enable_localSystem="true" enable_anywhere="false" enable_currentUserHome="false"/>
+    <options customize="allow" require-scripts="false" rootVolumeOnly="true" hostArchitectures="x86_64,arm64"/>
+    <allowed-os-versions>
+        <os-version min="10.13"/>
+    </allowed-os-versions>
+
+    <welcome file="welcome.html" mime-type="text/html"/>
+    <conclusion file="conclusion.html" mime-type="text/html"/>
+    <background file="background.tiff" alignment="bottomleft" scaling="none"/>
+    <background-darkAqua file="background-dark.tiff" alignment="bottomleft" scaling="none"/>
+
+    <choices-outline>
+        <line choice="vst3"/>
+        <line choice="au"/>
+        <line choice="app"/>
+    </choices-outline>
+
+    <choice id="vst3" visible="true" start_selected="true"
+            title="VST3 plugin"
+            description="For Ableton Live, FL Studio, Cubase, Studio One, Reaper and Bitwig. Installs to /Library/Audio/Plug-Ins/VST3.">
+        <pkg-ref id="com.plosivore.plosivore.vst3"/>
+    </choice>
+    <choice id="au" visible="true" start_selected="true"
+            title="Audio Unit"
+            description="For Logic Pro and GarageBand. Installs to /Library/Audio/Plug-Ins/Components.">
+        <pkg-ref id="com.plosivore.plosivore.au"/>
+    </choice>
+    <choice id="app" visible="true" start_selected="true"
+            title="Standalone app"
+            description="Runs Plosivore on its own, without a DAW. Installs to /Applications.">
+        <pkg-ref id="com.plosivore.plosivore.app"/>
+    </choice>
+
+    <pkg-ref id="com.plosivore.plosivore.vst3" version="__VERSION__" onConclusion="none">Plosivore-VST3.pkg</pkg-ref>
+    <pkg-ref id="com.plosivore.plosivore.au"   version="__VERSION__" onConclusion="none">Plosivore-AU.pkg</pkg-ref>
+    <pkg-ref id="com.plosivore.plosivore.app"  version="__VERSION__" onConclusion="none">Plosivore-App.pkg</pkg-ref>
+</installer-gui-script>
