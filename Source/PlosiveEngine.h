@@ -21,6 +21,10 @@
 namespace plosivore
 {
 
+// Portable constants (MSVC doesn't define M_PI / M_SQRT1_2 without _USE_MATH_DEFINES)
+constexpr double kPi = 3.14159265358979323846;
+constexpr double kSqrtHalf = 0.70710678118654752440;
+
 static inline float dbToGain (float db) { return std::pow (10.0f, db * 0.05f); }
 static inline float gainToDb (float g)  { return 20.0f * std::log10 (std::max (g, 1.0e-9f)); }
 
@@ -40,17 +44,17 @@ struct Biquad
         return y;
     }
 
-    void setLowPass (double fs, double fc, double q = M_SQRT1_2)
+    void setLowPass (double fs, double fc, double q = kSqrtHalf)
     {
-        const double w = std::tan (M_PI * fc / fs);
+        const double w = std::tan (kPi * fc / fs);
         const double n = 1.0 / (1.0 + w / q + w * w);
         b0 = (float) (w * w * n); b1 = 2.0f * b0; b2 = b0;
         a1 = (float) (2.0 * (w * w - 1.0) * n);
         a2 = (float) ((1.0 - w / q + w * w) * n);
     }
-    void setHighPass (double fs, double fc, double q = M_SQRT1_2)
+    void setHighPass (double fs, double fc, double q = kSqrtHalf)
     {
-        const double w = std::tan (M_PI * fc / fs);
+        const double w = std::tan (kPi * fc / fs);
         const double n = 1.0 / (1.0 + w / q + w * w);
         b0 = (float) n; b1 = -2.0f * b0; b2 = b0;
         a1 = (float) (2.0 * (w * w - 1.0) * n);
