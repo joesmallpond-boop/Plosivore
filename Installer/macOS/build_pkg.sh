@@ -60,7 +60,12 @@ sed -i '' "s/__VERSION__/$VERSION/g" "$WORK/res/welcome.html"
 for bg in background background-dark; do   # one TIFF holding 1x + 2x, so Retina screens stay sharp
     tiffutil -cathidpicheck "$HERE/resources/$bg.png" "$HERE/resources/$bg@2x.png" -out "$WORK/res/$bg.tiff" >/dev/null
 done
-sed "s/__VERSION__/$VERSION/g" "$HERE/distribution.xml" > "$WORK/distribution.xml"
+# Only offer the installer on Mac types the plugin was actually built for.
+ARCHS="$(lipo -archs "$ART/VST3/Plosivore.vst3/Contents/MacOS/Plosivore" 2>/dev/null || echo "x86_64 arm64")"
+HOST_ARCHS="$(echo "$ARCHS" | tr ' ' ',')"
+echo "Plugin architectures: $ARCHS"
+sed -e "s/__VERSION__/$VERSION/g" -e "s/hostArchitectures=\"[^\"]*\"/hostArchitectures=\"$HOST_ARCHS\"/" \
+    "$HERE/distribution.xml" > "$WORK/distribution.xml"
 
 # ---------------------------------------------------------------- product archive
 PKG="$WORK/dmg/Install Plosivore.pkg"

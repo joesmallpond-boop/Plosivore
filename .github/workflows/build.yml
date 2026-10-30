@@ -37,13 +37,14 @@ jobs:
             libfontconfig1-dev libgl1-mesa-dev
 
       - name: Configure
-        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+        # Apple Silicon only for speed; change arm64 below to "arm64;x86_64" for a universal build that also runs on Intel Macs.
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release ${{ runner.os == 'macOS' && '-DCMAKE_OSX_ARCHITECTURES=arm64' || '' }}
 
       - name: Build
         shell: bash
         run: |
           set -o pipefail
-          if ! cmake --build build --config Release --parallel 4 2>&1 | tee build.log; then
+          if ! cmake --build build --config Release --parallel 6 2>&1 | tee build.log; then
             # Surface compiler errors as annotations so they're readable from the GitHub API
             grep -E "error[: ]|Error [0-9]|fatal error" build.log | grep -v "warning" | sort -u | head -30 | \
               while IFS= read -r line; do echo "::error::${line//%/%25}"; done
