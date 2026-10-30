@@ -17,10 +17,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: macos-15
-            name: macOS-15
-          - os: macos-26
-            name: macOS-26
+          - os: macos-15-intel
+            name: macOS
           - os: windows-latest
             name: Windows
           - os: ubuntu-22.04
@@ -39,8 +37,7 @@ jobs:
             libfontconfig1-dev libgl1-mesa-dev
 
       - name: Configure
-        # Apple Silicon only for speed; change arm64 below to "arm64;x86_64" for a universal build that also runs on Intel Macs.
-        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release ${{ runner.os == 'macOS' && '-DCMAKE_OSX_ARCHITECTURES=arm64' || '' }}
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 
       - name: Build
         shell: bash
@@ -89,7 +86,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: runner.os == 'macOS'
         with:
-          name: Plosivore-${{ matrix.name }}-Installer
+          name: Plosivore-macOS-Installer
           path: installer/*.dmg
 
       - name: Collect
